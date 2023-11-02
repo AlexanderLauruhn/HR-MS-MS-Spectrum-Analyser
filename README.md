@@ -3,3 +3,4 @@ This software removes those signals from a high-resolution tandem mass spectrum,
 # How to use the software
 Open your mass spectrum using the button "import File". This should by available as .txt or .csv file. The spectrum will be shown as plot on the screen.<br>
 After that, type the molecular sum of your target compound, set the measurement´s ionisation (positive or negative).
+<img src=".\Picture\HR-MS MS software.png">
