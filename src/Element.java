@@ -8,30 +8,30 @@ public class Element {
 	private float mass;//mass of the isotope times count
 	
 	public Element(String name, int count) {
-		this.name=name;
-		this.count=count;
+		this.name = name;
+		this.count = count;
 		switch (name) {//carbon, hydrogen, deuterium, nitrogen, oxygen, flourine, phosphorous
-		case "C", "C(12)": mass=12.0f;
+		case "C", "C(12)": mass = 12.0f;
 			break;
-		case "H": mass=1.007825f;
+		case "H": mass = 1.007825f;
 			break;
-		case "D": mass=2.014102f;
+		case "D": mass = 2.014102f;
 			break;
-		case "N": mass=14.003074f;
+		case "N": mass = 14.003074f;
 			break;
-		case "O": mass=15.994915f;
+		case "O": mass = 15.994915f;
 			break;
-		case "F": mass=18.998403f;
+		case "F": mass = 18.998403f;
 			break;
-		case "Cl": mass=34.968853f;
+		case "Cl": mass = 34.968853f;
 			break;
-		case "Br": mass=78.918338f;
+		case "Br": mass = 78.918338f;
 			break;
-		case "S": mass=31.972071f;
+		case "S": mass = 31.972071f;
 			break;
-		case "P": mass=30.973762f;
+		case "P": mass = 30.973762f;
 			break;
-		case "B": mass=11.009305f;
+		case "B": mass = 11.009305f;
 		}
 		mass*=count;	
 	}

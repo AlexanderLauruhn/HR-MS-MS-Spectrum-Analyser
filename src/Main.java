@@ -14,43 +14,42 @@ import java.awt.*;
 
 public class Main  extends JFrame{
 	static Main main = new Main();
-
-	JTextField maxField= new JTextField(); //enter the sum formula of your compound here
-	JTextField minField= new JTextField(); //for  minimum sum formula
-	JTextField errorTextField =new JTextField("1"); //enter the deviation allowed for comparison
-	JTextField chargeField= new JTextField("1"); //positively and negatively charges allowed
-	JButton calculateButton = new JButton("Calculate"); //start calculation of all fragments
-	JButton importButton = new JButton("import File"); // import mass spectra as csv or txt
-	JButton exportButton = new JButton("export File"); //export csv
-	JButton zoomInButton =new JButton("<- ->"); //zoom into ms spectrum
-	JButton zoomOutButton =new JButton("-> <-");// enlarge ms spectrum
-	JButton[] colorButtons = new JButton[16];// choose color for current action in spectrum
-	ActionListener actionListener = new ActionHandler(); //actionlistener for buttons
-	JTable fragmentTable = new JTable(), spectrumTable = new JTable(); //tables for
-	GraphicSpectrum graphic= new GraphicSpectrum();// shows the imported spectrum
-	YAxis yScale = new YAxis();//YAxis additional JPanel to not shift axis by zooming
-	JScrollPane scrollPaneFragmentTable = new JScrollPane(fragmentTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-	JScrollPane scrollSpectrumTable = new JScrollPane(spectrumTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-	JScrollPane scrollGraphik = new JScrollPane(graphic, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-	JLabel minLabel = new JLabel("Minimum");//Labels for textfield
-	JLabel maxLabel = new JLabel("Maximum"); //Label for textfield
-	JLabel errorLabel = new JLabel("Error:");  //error in part per million, user input
-	JLabel chargeLabel = new JLabel("Charge");//Label for textfield
-	JLabel ionisation = new JLabel("Ionisation");
-	JLabel message = new JLabel(); // to show if data are incorrect
-	JLabel mzLabel = new JLabel("m/z"); //Label for x Axis
-	JLabel filenameLabel = new JLabel(); //Label for filename in spectrum
-	JRadioButton plusRadioButton = new JRadioButton("+"); //positive ionisation
-	JRadioButton minusRadioButton = new JRadioButton("-"); //negative ionisation
-	JLayeredPane layer = new JLayeredPane(); 
-	DefaultTableModel model = (DefaultTableModel) fragmentTable.getModel();
-	DefaultTableModel model2 = (DefaultTableModel) fragmentTable.getModel();
-	Border smallBorder = BorderFactory.createLineBorder (Color.BLACK, 0);
-	Border bigBorder = BorderFactory.createLineBorder (Color.BLACK, 3);
-	ButtonGroup plusminusButtonGroup = new ButtonGroup();//positive or negative ionisation
-	JCheckBox removeImplausiblesCheckBox = new JCheckBox("remove implausibles");
-	static int charge=1; //multiple molecule charges (more than one additional electron)
-	static ArrayList<Molecule> allCompounds =new ArrayList<Molecule>();
+	private JTextField maxField= new JTextField(); //enter the sum formula of your compound here
+	private JTextField minField= new JTextField(); //for  minimum sum formula
+	private JTextField deviationTextField =new JTextField("1"); //enter the deviation allowed for comparison
+	private JTextField chargeField= new JTextField("1"); //positively and negatively charges allowed
+	private JButton calculateButton = new JButton("Calculate"); //start calculation of all fragments
+	private JButton importButton = new JButton("import File"); // import mass spectra as csv or txt
+	private JButton exportButton = new JButton("export File"); //export csv
+	private JButton zoomInButton = new JButton("<- ->"); //zoom into ms spectrum
+	private JButton zoomOutButton = new JButton("-> <-");// enlarge ms spectrum
+	private JButton[] colorButtons = new JButton[16];// choose color for current action in spectrum
+	private ActionListener actionListener = new ActionHandler(); //actionlistener for buttons
+	private JTable fragmentTable = new JTable(), spectrumTable = new JTable(); //tables for
+	private GraphicSpectrum graphic= new GraphicSpectrum();// shows the imported spectrum
+	private YAxis yScale = new YAxis();//YAxis additional JPanel to not shift axis by zooming
+	private JScrollPane scrollPaneFragmentTable = new JScrollPane(fragmentTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+	private JScrollPane scrollSpectrumTable = new JScrollPane(spectrumTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+	private JScrollPane scrollGraphik = new JScrollPane(graphic, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+	private JLabel minLabel = new JLabel("Minimum");//Labels for textfield
+	private JLabel maxLabel = new JLabel("Maximum"); //Label for textfield
+	private JLabel deviationLabel = new JLabel("Deviation:");  //error in part per million, user input
+	private JLabel chargeLabel = new JLabel("Charge");//Label for textfield
+	private JLabel ionisation = new JLabel("Ionisation");
+	private JLabel messageLabel = new JLabel(); // to show if data are incorrect
+	private JLabel mzLabel = new JLabel("m/z"); //Label for x Axis
+	private JLabel filenameLabel = new JLabel(); //Label for filename in spectrum
+	private JRadioButton plusRadioButton = new JRadioButton("+"); //positive ionisation
+	private JRadioButton minusRadioButton = new JRadioButton("-"); //negative ionisation
+	private JLayeredPane layer = new JLayeredPane();
+	private DefaultTableModel model = (DefaultTableModel) fragmentTable.getModel();
+	private DefaultTableModel model2 = (DefaultTableModel) fragmentTable.getModel();
+	private Border smallBorder = BorderFactory.createLineBorder (Color.BLACK, 0);
+	private Border bigBorder = BorderFactory.createLineBorder (Color.BLACK, 3);
+	private ButtonGroup plusminusButtonGroup = new ButtonGroup();//positive or negative ionisation
+	private JCheckBox removeImplausiblesCheckBox = new JCheckBox("remove implausibles");
+	private static int charge = 1; //multiple molecule charges (more than one additional electron)
+	private static ArrayList<Molecule> allCompounds = new ArrayList<Molecule>();
 
 	public Main() {
 		//setup fragment table
@@ -64,7 +63,7 @@ public class Main  extends JFrame{
 		//setup spectrumtable
         spectrumTable.setModel(new DefaultTableModel(
                 new Object[][]{},
-                new String[]{"Nr.", "mass","rel. int. [%]", "corresponding", "error [ppm]"}));
+                new String[]{"Nr.", "mass","rel. int. [%]", "corresponding", "deviation [ppm]"}));
         spectrumTable.getColumnModel().getColumn(0).setPreferredWidth(17);
         spectrumTable.setEnabled(false);
         spectrumTable.setPreferredScrollableViewportSize(new Dimension(450,63));
@@ -77,11 +76,11 @@ public class Main  extends JFrame{
         model2 = (DefaultTableModel) spectrumTable.getModel();
         scrollSpectrumTable.setViewportView(spectrumTable);
 
-        errorTextField.setBounds(340,90,80,30);
-		errorLabel.setBounds(270,90,80,30);
-		message.setBounds(20,200,550,40);
-		message.setFont(new Font("Arial Black", Font.PLAIN, 19));
-		message.setVisible(false);
+        deviationTextField.setBounds(340,90,80,30);
+		deviationLabel.setBounds(270,90,80,30);
+		messageLabel.setBounds(20,200,550,40);
+		messageLabel.setFont(new Font("Arial Black", Font.PLAIN, 19));
+		messageLabel.setVisible(false);
 		layer.setBounds(10,250,550,350);
 		//setup settings for ionisation
 		chargeLabel.setBounds(270,140,80,30);
@@ -114,15 +113,15 @@ public class Main  extends JFrame{
 		plusRadioButton.setSelected(true);
 		minusRadioButton.setBounds(340,40,50,30);
 		ionisation.setBounds(280,10,90,30);
-		for (int i=0; i<4; i++) {
-			for (int j=0; j<4; j++) {
-				colorButtons[i*4+j]= new JButton();
-				colorButtons[i*4+j].setBounds(400+j*25,10+i*18,25,18);
-				colorButtons[i*4+j].setBorder(smallBorder);
-				colorButtons[i*4+j].setBackground(setColorByValue(i*4+j));
-				colorButtons[i*4+j].addActionListener(actionListener);
-				colorButtons[i*4+j].setToolTipText("choose the color in which you want to show fitting signals");
-				add(colorButtons[i*4+j]);
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				colorButtons[i * 4 + j]= new JButton();
+				colorButtons[i * 4 + j].setBounds(400+j*25,10+i*18,25,18);
+				colorButtons[i * 4 + j].setBorder(smallBorder);
+				colorButtons[i * 4 + j].setBackground(setColorByValue(i*4+j));
+				colorButtons[i * 4 + j].addActionListener(actionListener);
+				colorButtons[i * 4 + j].setToolTipText("choose the color in which you want to show fitting signals");
+				add(colorButtons[i * 4 + j]);
 			}
 		}		
 		colorButtons[4].setBorder(bigBorder);
@@ -151,8 +150,8 @@ public class Main  extends JFrame{
 		add(ionisation);
 		add(importButton);
 		add(exportButton);
-		add(errorTextField);
-		add(errorLabel);
+		add(deviationTextField);
+		add(deviationLabel);
 		add(chargeLabel);
 		add(chargeField);
 		scrollGraphik.setBounds(0,0,550,350);
@@ -165,7 +164,7 @@ public class Main  extends JFrame{
 		layer.add(yScale, JLayeredPane.DRAG_LAYER);
 		layer.add(filenameLabel,JLayeredPane.DRAG_LAYER);
 		graphic.setPreferredSize(new Dimension(545, 350));
-		add(message);
+		add(messageLabel);
 		add(layer);
 		add(new JLabel());
 		setFocusable(true);
@@ -183,23 +182,23 @@ public class Main  extends JFrame{
 	 */
 	public static ArrayList<Element> readInput(String input) {
 		ArrayList<String> elements= new ArrayList<String>();
-		int counter =0;
-		for (int i=1; i<input.length(); i++) {
+		int counter = 0;
+		for (int i = 1; i < input.length(); i++) {
 			if (Character.isUpperCase(input.toCharArray()[i])) {//each element start with upperCase letter
 				elements.add(input.substring(counter,i));
-				counter=i;
+				counter = i;
 			}
 		}
 		elements.add(input.substring(counter,input.toCharArray().length));
-		ArrayList<Element> formula= new ArrayList<Element>();
-		for (String e: elements) {
-			int elementCount=1; //count the elements of molecule
-			String elementName="";
-			for (int i=e.length()-1; i>-1; i--) {
-				if (!Character.isDigit(e.charAt(i)) && elementName==""){
-					elementName=e.substring(0,i+1);}
+		ArrayList<Element> formula = new ArrayList<Element>();
+		for (String e : elements) {
+			int elementCount = 1; //count the elements of molecule
+			String elementName = "";
+			for (int i = e.length() - 1; i > -1; i--) {
+				if (!Character.isDigit(e.charAt(i)) && elementName == ""){
+					elementName = e.substring(0, i + 1);}
 				try {
-					elementCount=Integer.parseInt(e.substring(i+1,e.length()));
+					elementCount=Integer.parseInt(e.substring(i + 1, e.length()));
 				}
 				catch (NumberFormatException ignored){}
 			}
@@ -222,7 +221,7 @@ public class Main  extends JFrame{
 			int size=allCompounds.size();
 			for (int j=1; j<=element.getCount()-tiniestFragment.getCountOfElement(element); j++) {//for the count of this element
 				Element newElement = new Element(element.getName(), j);
-				for (int i=0; i<size;i++) {//copy the elements from a previous Molecule
+				for (int i = 0; i < size; i++) {//copy the elements from a previous Molecule
 					ArrayList<Element> previous= new ArrayList<Element>();
 					Molecule newMolecule= new Molecule(previous,charge);
 					for (Element p: allCompounds.get(i).getElements()) {
@@ -237,7 +236,7 @@ public class Main  extends JFrame{
 			}
 		}	
 		sortbyMass(allCompounds);
-		if (tiniestFragment.calculateMass()<1 && allCompounds.size()>0) {
+		if (tiniestFragment.calculateMass() < 1 && allCompounds.size() > 0) {
 			allCompounds.remove(0);
 		}//remove the first and empty molecule
 		if (Main.main.removeImplausiblesCheckBox.isSelected()) {
@@ -260,8 +259,8 @@ public class Main  extends JFrame{
 	 * @param message as string with error information
 	 */
 	public static void errorMessage(String message) {
-		Main.main.message.setVisible(true);
-		Main.main.message.setText(message);
+		Main.main.messageLabel.setVisible(true);
+		Main.main.messageLabel.setText(message);
 	}
 
 	/**
@@ -295,18 +294,96 @@ public class Main  extends JFrame{
 	 * e.g. molecules that cannot exist like C3H3
 	 */
 	public static void removeImplausibles() {
-		for (int i=0; i<allCompounds.size(); i++) {
+		for (int i = 0; i < allCompounds.size(); i++) {
 			Molecule molecule= allCompounds.get(i);
-			while ((molecule.getElements().size()<2 ||
-				molecule.getAtomCount("C")*2>molecule.getAtomCount() ||
-				molecule.getAtomCount("H")*3/2>molecule.getAtomCount() ||
-				molecule.getAtomCount("O")*2>molecule.getAtomCount() ||
-				molecule.getAtomCount("N")*2>molecule.getAtomCount() ||
-				molecule.getAtomCount("C")*2>molecule.getAtomCount())&&
-				allCompounds.size()>0) {
+			while ((molecule.getElements().size() < 2 ||
+				molecule.getAtomCount("C") * 2 > molecule.getAtomCount() ||
+				molecule.getAtomCount("H") * 3 / 2 > molecule.getAtomCount() ||
+				molecule.getAtomCount("O") * 2 > molecule.getAtomCount() ||
+				molecule.getAtomCount("N") * 2 > molecule.getAtomCount() ||
+				molecule.getAtomCount("C") * 2 > molecule.getAtomCount()) &&
+				allCompounds.size() > 0) {
 					allCompounds.remove(i);
 					molecule= allCompounds.get(i);
 			}
 		}
+	}
+
+	public JTextField getMaxField(){
+		return maxField;
+	}
+	public JTextField getMinField(){
+		return minField;
+	}
+	public JTextField getDeviationTextField(){
+		return deviationTextField;
+	}
+	public JTextField getChargeField(){
+		return chargeField;
+	}
+	public JButton getCalculateButton(){
+		return calculateButton;
+	}
+	public JButton getImportButton(){
+		return importButton;
+	}
+
+	public JButton getExportButton(){
+		return exportButton;
+	}
+
+	public JButton getZoomInButton(){
+		return zoomInButton;
+	}
+
+	public JButton getZoomOutButton(){
+		return zoomOutButton;
+	}
+
+	public JButton getColorButtons(int i){
+		return colorButtons[i];
+	}
+	public GraphicSpectrum getGraphic(){
+		return graphic;
+	}
+
+	public JLabel getFilenameLabel(){
+		return filenameLabel;
+	}
+	public JLabel getMessageLabel(){
+		return messageLabel;
+	}
+	public JRadioButton getPlusRadioButton(){
+		return plusRadioButton;
+	}
+	public JRadioButton getMinusRadioButton(){
+		return minusRadioButton;
+	}
+
+	public DefaultTableModel getModel(){
+		return model;
+	}
+	public DefaultTableModel getModel2(){
+		return model2;
+	}
+
+	public Border getSmallBorder(){
+		return smallBorder;
+	}
+	public Border getBigBorder(){
+		return bigBorder;}
+	public void setBigBorder(Border border){
+		this.bigBorder = border;
+	}
+
+	public ArrayList<Molecule> getAllCompounds(){
+		return allCompounds;
+	}
+
+	public int getCharge(){
+		return charge;
+	}
+	public void setCharge(int charge){
+		this.charge = charge;
 	}
 }
